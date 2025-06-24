@@ -1,0 +1,12 @@
+[build]
+  command = "echo 'No build command'"
+  publish = "."
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[plugins]
+  package = "netlify-plugin-inline-functions-env"
+  enabled = false
