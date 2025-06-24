@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
+    <script>
+  // Redirect all 404 to index.html
+  if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+    window.history.replaceState(null, null, '/');
+  }
+</script>
     <meta name="theme-color" content="#4361ee">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
