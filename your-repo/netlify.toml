@@ -1,3 +1,8 @@
 [build]
+  command = "echo 'No build command'"
   publish = "."
-  command = "echo 'No build needed'"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
