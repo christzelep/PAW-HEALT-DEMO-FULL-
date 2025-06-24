@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pawhealth-v1';
+const CACHE_NAME = 'pawhealth-v2'; // Αλλαγή έκδοσης για cache busting
 const urlsToCache = [
   '/',
   '/index.html',
