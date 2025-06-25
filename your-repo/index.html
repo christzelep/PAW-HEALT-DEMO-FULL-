@@ -18,11 +18,64 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ... (όλο το CSS παραμένει αμετάβλητο) ... */
+        :root {
+            --primary: #4361ee;
+            --secondary: #f72585;
+            --accent: #4cc9f0;
+            --success: #06d6a0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-blue: #caf0f8;
+            --light-pink: #ffd6ff;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --radius: 20px;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e0f7fa 0%, #f8bbd0 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding-bottom: 100px;
+            position: relative;
+        }
+        
+        /* Floating dog animation */
+        .floating-dog {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            animation: float 6s ease-in-out infinite;
+            z-index: 100;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
     </style>
 </head>
 <body>
-    <!-- ... (όλο το HTML παραμένει αμετάβλητο) ... -->
+    <!-- ... (όλο το HTML σώμα της σελίδας) ... -->
 
     <script>
         // ================== PWA FIXES ================== //
@@ -76,10 +129,8 @@
     </script>
 </body>
 </html>
-</body>
-</html>
-    
-    <!-- PWA Manifest -->
+   
+  <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
     
     <!-- Favicon -->
