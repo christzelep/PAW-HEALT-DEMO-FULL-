@@ -1,18 +1,19 @@
 {
-  "name": "PawHealth - Premium Demo",
+  "name": "PawHealth",
   "short_name": "PawHealth",
-  "start_url": "/index.html",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#4361ee",
+  "background_color": "#ffffff",
   "theme_color": "#4361ee",
+  "description": "For a healthy and happy dog",
   "icons": [
     {
-      "src": "icon-192x192.png",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon-512x512.png",
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
