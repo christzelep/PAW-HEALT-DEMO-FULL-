@@ -49,66 +49,52 @@
     <!-- ... (όλο το HTML παραμένει αμετάβλητο) ... -->
 
     <script>
-        // ================== PWA FIXES ================== //
-        let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
+       <script>
+  // ================== PWA FIXES ================== //
+  let deferredPrompt;
+  const installBtn = document.getElementById('installBtn');
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'flex';
-            installBtn.classList.add('pulse');
-            
-            setTimeout(() => {
-                installBtn.classList.remove('pulse');
-            }, 3000);
-        });
+  // 1. Χειρισμός εγκατάστασης
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    if (installBtn) {
+      installBtn.style.display = 'flex';
+      installBtn.classList.add('pulse');
+      setTimeout(() => installBtn.classList.remove('pulse'), 3000);
+    }
+  });
 
-        installBtn.addEventListener('click', async () => {
-            if (!deferredPrompt) {
-                showNotification('Η εγκατάσταση δεν είναι διαθέσιμη', 'info');
-                return;
-            }
-            
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            
-            if (outcome === 'accepted') {
-                installBtn.innerHTML = '<i class="fas fa-check"></i> Γίνεται εγκατάσταση';
-                installBtn.disabled = true;
-                showNotification('Η εφαρμογή εγκαθίσταται...', 'success');
-            } else {
-                showNotification('Ακυρώθηκε η εγκατάσταση', 'info');
-            }
-            
-            deferredPrompt = null;
-        });
+  // 2. Κουμπί εγκατάστασης (αν υπάρχει στο DOM)
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        console.log('Install not available');
+        return;
+      }
+      
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      if (outcome === 'accepted') {
+        installBtn.innerHTML = '<i class="fas fa-check"></i> Εγκαταστάθηκε!';
+        installBtn.disabled = true;
+      }
+      
+      deferredPrompt = null;
+    });
+  }
 
-        installBtn.addEventListener('click', async () => {
-            if (!deferredPrompt) {
-                showNotification('Η εγκατάσταση δεν είναι διαθέσιμη', 'info');
-                return;
-            }
-            
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            
-            if (outcome === 'accepted') {
-                installBtn.innerHTML = '<i class="fas fa-check"></i> Γίνεται εγκατάσταση';
-                installBtn.disabled = true;
-                showNotification('Η εφαρμογή εγκαθίσταται...', 'success');
-            } else {
-                showNotification('Ακυρώθηκε η εγκατάσταση', 'info');
-            }
-            
-            deferredPrompt = null;
-        });
-
-        window.addEventListener('appinstalled', () => {
-            installBtn.style.display = 'none';
-            showNotification('Η εφαρμογή εγκαταστάθηκε επιτυχώς!', 'success');
-        });
-
+  // 3. Υποχρεωτικός Service Worker (προσθήκη νέου κομματιού)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/worker.js')
+        .then(reg => console.log('SW registered:', reg))
+        .catch(err => console.error('SW error:', err));
+    });
+  }
+</script>
         // ================== SERVICE WORKER REGISTRATION ================== //
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
