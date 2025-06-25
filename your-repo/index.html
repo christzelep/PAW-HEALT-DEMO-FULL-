@@ -1,29 +1,6 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-    <!-- Αυτό το script προκαλεί προβλήματα με το PWA -->
-    <!-- <script>
-        if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
-            window.history.replaceState(null, null, '/');
-        }
-    </script> -->
-    
-    <meta name="theme-color" content="#4361ee">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Εφαρμογή παρακολούθησης υγείας σκύλων">
-    <title>PawHealth - Premium Demo</title>
-    
-   <!DOCTYPE html>
-<html lang="el">
-<head>
-    <!-- Αυτό το script προκαλεί προβλήματα με το PWA -->
-    <!-- <script>
-        if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
-            window.history.replaceState(null, null, '/');
-        }
-    </script> -->
-    
     <meta name="theme-color" content="#4361ee">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +8,6 @@
     <title>PawHealth - Premium Demo</title>
     
     <!-- PWA Manifest -->
-
     <link rel="manifest" href="/manifest.json">
     
     <!-- Favicon -->
@@ -49,68 +25,57 @@
     <!-- ... (όλο το HTML παραμένει αμετάβλητο) ... -->
 
     <script>
-       <script>
-  // ================== PWA FIXES ================== //
-  let deferredPrompt;
-  const installBtn = document.getElementById('installBtn');
+        // ================== PWA FIXES ================== //
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
 
-  // 1. Χειρισμός εγκατάστασης
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    
-    if (installBtn) {
-      installBtn.style.display = 'flex';
-      installBtn.classList.add('pulse');
-      setTimeout(() => installBtn.classList.remove('pulse'), 3000);
-    }
-  });
+        // 1. Χειρισμός εγκατάστασης
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            if (installBtn) {
+                installBtn.style.display = 'flex';
+                installBtn.classList.add('pulse');
+                setTimeout(() => installBtn.classList.remove('pulse'), 3000);
+            }
+        });
 
-  // 2. Κουμπί εγκατάστασης (αν υπάρχει στο DOM)
-  if (installBtn) {
-    installBtn.addEventListener('click', async () => {
-      if (!deferredPrompt) {
-        console.log('Install not available');
-        return;
-      }
-      
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      
-      if (outcome === 'accepted') {
-        installBtn.innerHTML = '<i class="fas fa-check"></i> Εγκαταστάθηκε!';
-        installBtn.disabled = true;
-      }
-      
-      deferredPrompt = null;
-    });
-  }
+        // 2. Κουμπί εγκατάστασης (αν υπάρχει στο DOM)
+        if (installBtn) {
+            installBtn.addEventListener('click', async () => {
+                if (!deferredPrompt) {
+                    console.log('Install not available');
+                    return;
+                }
+                
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    installBtn.innerHTML = '<i class="fas fa-check"></i> Εγκαταστάθηκε!';
+                    installBtn.disabled = true;
+                }
+                
+                deferredPrompt = null;
+            });
+        }
 
-  // 3. Υποχρεωτικός Service Worker (προσθήκη νέου κομματιού)
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/worker.js')
-        .then(reg => console.log('SW registered:', reg))
-        .catch(err => console.error('SW error:', err));
-    });
-  }
-</script>
-        // ================== SERVICE WORKER REGISTRATION ================== //
+        // 3. Υποχρεωτικό: Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
+                navigator.serviceWorker.register('/worker.js')
                     .then(registration => {
                         console.log('Service Worker registered:', registration);
                     })
                     .catch(error => {
-                        console.log('Service Worker registration failed:', error);
-                        showNotification('Σφάλμα εγγραφής Service Worker', 'info');
+                        console.error('Service Worker registration failed:', error);
                     });
             });
         }
-
-        // ... (όλο το υπόλοιπο JavaScript παραμένει αμετάβλητο) ...
     </script>
+</body>
+</html>
 </body>
 </html>
     
