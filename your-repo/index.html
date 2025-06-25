@@ -1,17 +1,95 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-    <script>
-  // Redirect all 404 to index.html
-  if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
-    window.history.replaceState(null, null, '/');
-  }
-</script>
+    <!-- Αυτό το script προκαλεί προβλήματα με το PWA -->
+    <!-- <script>
+        if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+            window.history.replaceState(null, null, '/');
+        }
+    </script> -->
+    
     <meta name="theme-color" content="#4361ee">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Εφαρμογή παρακολούθησης υγείας σκύλων">
     <title>PawHealth - Premium Demo</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="icon-192x192.png" type="image/png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ... (όλο το CSS παραμένει αμετάβλητο) ... */
+    </style>
+</head>
+<body>
+    <!-- ... (όλο το HTML παραμένει αμετάβλητο) ... -->
+
+    <script>
+        // ================== PWA FIXES ================== //
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'flex';
+            installBtn.classList.add('pulse');
+            
+            setTimeout(() => {
+                installBtn.classList.remove('pulse');
+            }, 3000);
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) {
+                showNotification('Η εγκατάσταση δεν είναι διαθέσιμη', 'info');
+                return;
+            }
+            
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                installBtn.innerHTML = '<i class="fas fa-check"></i> Γίνεται εγκατάσταση';
+                installBtn.disabled = true;
+                showNotification('Η εφαρμογή εγκαθίσταται...', 'success');
+            } else {
+                showNotification('Ακυρώθηκε η εγκατάσταση', 'info');
+            }
+            
+            deferredPrompt = null;
+        });
+
+        window.addEventListener('appinstalled', () => {
+            installBtn.style.display = 'none';
+            showNotification('Η εφαρμογή εγκαταστάθηκε επιτυχώς!', 'success');
+        });
+
+        // ================== SERVICE WORKER REGISTRATION ================== //
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registered:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker registration failed:', error);
+                        showNotification('Σφάλμα εγγραφής Service Worker', 'info');
+                    });
+            });
+        }
+
+        // ... (όλο το υπόλοιπο JavaScript παραμένει αμετάβλητο) ...
+    </script>
+</body>
+</html>
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
