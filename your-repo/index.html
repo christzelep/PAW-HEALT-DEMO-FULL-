@@ -14,6 +14,22 @@
     <meta name="description" content="Εφαρμογή παρακολούθησης υγείας σκύλων">
     <title>PawHealth - Premium Demo</title>
     
+   <!DOCTYPE html>
+<html lang="el">
+<head>
+    <!-- Αυτό το script προκαλεί προβλήματα με το PWA -->
+    <!-- <script>
+        if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+            window.history.replaceState(null, null, '/');
+        }
+    </script> -->
+    
+    <meta name="theme-color" content="#4361ee">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Εφαρμογή παρακολούθησης υγείας σκύλων">
+    <title>PawHealth - Premium Demo</title>
+    
     <!-- PWA Manifest -->
 
     <link rel="manifest" href="/manifest.json">
@@ -46,6 +62,26 @@
             setTimeout(() => {
                 installBtn.classList.remove('pulse');
             }, 3000);
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) {
+                showNotification('Η εγκατάσταση δεν είναι διαθέσιμη', 'info');
+                return;
+            }
+            
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                installBtn.innerHTML = '<i class="fas fa-check"></i> Γίνεται εγκατάσταση';
+                installBtn.disabled = true;
+                showNotification('Η εφαρμογή εγκαθίσταται...', 'success');
+            } else {
+                showNotification('Ακυρώθηκε η εγκατάσταση', 'info');
+            }
+            
+            deferredPrompt = null;
         });
 
         installBtn.addEventListener('click', async () => {
